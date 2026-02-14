@@ -1,0 +1,151 @@
+% ================= 1. STATEMENT BOX (Red Ribbon) =================
+\newtcolorbox{statementbox}[1]{%
+    enhanced,
+    breakable,
+    colback=BoxBg,
+    colframe=BorderGray,
+    boxrule=0.8pt,
+    arc=10pt,
+    top=22pt,
+    bottom=12pt,
+    left=10pt,
+    right=10pt,
+    fontupper=\khmerfont, 
+    drop fuzzy shadow,
+    overlay={
+        % 1. FLOATING SHADOW
+        \begin{scope}[shift={([xshift=2pt,yshift=-2pt]frame.north west)}]
+            \fill[black!15, blur shadow={shadow blur steps=8, shadow opacity=15}]
+                (-6pt,-14pt) -- (155pt,-14pt)
+                .. controls (180pt,-14pt) and (160pt,10pt) ..
+                (195pt,10pt)
+                -- (-6pt,10pt) -- cycle;
+        \end{scope}
+
+        % 2. LEFT RIBBON FOLD
+        \fill[FoldRed]
+            ([xshift=-6pt,yshift=-14pt]frame.north west) --
+            ([xshift=0pt,yshift=-6pt]frame.north west) --
+            ([xshift=0pt,yshift=-14pt]frame.north west) -- cycle;
+
+        % 3. MAIN RIBBON
+        \path[fill=MainRed]
+            ([xshift=-6pt,yshift=-14pt]frame.north west) --
+            ([xshift=155pt,yshift=-14pt]frame.north west)
+            .. controls ([xshift=185pt,yshift=-14pt]frame.north west)
+                     and ([xshift=165pt,yshift=10pt]frame.north west) ..
+            ([xshift=195pt,yshift=10pt]frame.north west)
+            --
+            ([xshift=-6pt,yshift=10pt]frame.north west) -- cycle;
+
+        % 4. TITLE TEXT (Using Khmer OS Muol)
+        \node[
+            anchor=west,
+            text=white,
+            font=\khmerheadingfont\large
+        ]
+        at ([xshift=8pt,yshift=-2pt]frame.north west) {#1};
+
+        % 5. BOTTOM RIGHT ORGANIC ACCENT
+        \path[fill=MainRed]
+            (frame.south east) -- ++(-30pt,0)
+            .. controls ++(15pt,2pt) and ++(-5pt,18pt) ..
+            (frame.south east) -- cycle;
+    }
+}
+
+% ================= 2. WAVEBOX STYLE (Blue Snake) =================
+\tcbset{
+    wavebox/.style={
+        enhanced,
+        colback=blue!5,
+        colframe=blue!60!black,
+        fonttitle=\khmerheadingfont, 
+        attach boxed title to top left={yshift=-2mm, xshift=2mm},
+        boxed title style={
+            colback=blue!20,
+            colframe=blue!60!black,
+            top=3pt, bottom=3pt, 
+        },
+        drop shadow=black!50,
+        float=htbp,
+        before skip=10pt,
+        after skip=10pt,
+        fontupper=\khmerfont,
+        frame code={
+            \path[tcb fill frame, decorate, decoration={snake, amplitude=2pt, segment length=10pt}]
+                (frame.north west) -- (frame.north east);
+            \path[tcb fill frame] (frame.north east) -- (frame.south east);
+            \path[tcb fill frame] (frame.north west) -- (frame.south west);
+            \path[tcb fill frame, decorate, decoration={snake, amplitude=2pt, segment length=10pt}]
+                (frame.south east) -- (frame.south west);
+        },
+    }
+}
+
+% ================= COLORS =================
+\definecolor{MainGreen}{HTML}{2E7D32}
+\definecolor{FoldGreen}{HTML}{1B5E20}
+\definecolor{BoxBgGreen}{HTML}{F5FBF5}
+\definecolor{BorderGray}{HTML}{E5E5E5}
+
+% ================= PROPOSITION BOX (MIRRORED WAVE) =================
+\newtcolorbox{propositionbox}[1]{%
+    enhanced,
+    breakable,
+    colback=BoxBgGreen,
+    colframe=BorderGray,
+    boxrule=0.8pt,
+    arc=10pt,
+    top=25pt,  % Increased top margin for taller ribbon
+    bottom=12pt,
+    left=10pt,
+    right=10pt,
+    fontupper=\khmerfont,
+    drop fuzzy shadow,
+    overlay={%
+
+        % 1. FLOATING SHADOW — ORIGINAL HEIGHT RESTORED
+        \begin{scope}[shift={([xshift=2pt,yshift=-2pt]frame.north west)}]
+            \fill[black!15, blur shadow={shadow blur steps=8, shadow opacity=15}]
+                (-5pt,12pt) 
+                .. controls (25pt,12pt) and (5pt,-14pt) .. (35pt,-14pt) % Left wave (full height)
+                -- (155pt,-14pt)
+                .. controls (185pt,-14pt) and (165pt,12pt) .. (195pt,12pt) % Right wave (full height)
+                -- cycle;
+        \end{scope}
+
+        % 2. LEFT RIBBON FOLD (DARK GREEN)
+        \fill[FoldGreen]
+            ([xshift=35pt,yshift=-14pt]frame.north west) --
+            ([xshift=40pt,yshift=-2pt]frame.north west) --
+            ([xshift=40pt,yshift=-14pt]frame.north west) -- cycle;
+
+        % 3. MAIN RIBBON — FULL HEIGHT FOR KHMER MUOL
+        \path[fill=MainGreen]
+            ([xshift=-5pt,yshift=12pt]frame.north west) % Top-left wing (restored to 12pt)
+            .. controls ([xshift=25pt,yshift=12pt]frame.north west) 
+                   and ([xshift=5pt,yshift=-14pt]frame.north west) ..
+            ([xshift=35pt,yshift=-14pt]frame.north west) % Bottom point
+            -- 
+            ([xshift=155pt,yshift=-14pt]frame.north west) % Straight bottom
+            .. controls ([xshift=185pt,yshift=-14pt]frame.north west)
+                     and ([xshift=165pt,yshift=12pt]frame.north west) ..
+            ([xshift=195pt,yshift=12pt]frame.north west) % Right wave (restored to 12pt)
+            -- cycle;
+
+        % 4. TITLE TEXT — VERTICALLY CENTERED IN TALLER RIBBON
+        \node[
+            anchor=west,
+            text=white,
+            font=\khmerheadingfont\large\bfseries  % Added bold for Khmer Muol
+        ]
+        at ([xshift=45pt,yshift=0pt]frame.north west) {#1};  % Centered at y=0
+
+        % 5. BOTTOM RIGHT ORGANIC ACCENT
+        \path[fill=MainGreen]
+            (frame.south east) -- ++(-30pt,0)
+            .. controls ++(15pt,2pt) and ++(-5pt,18pt) ..
+            (frame.south east) -- cycle;
+    }
+}
