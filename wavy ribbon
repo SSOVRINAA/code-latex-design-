@@ -1,3 +1,4 @@
+%THIS RIBBON FLOATING IS THE FIRST ORIGINAL IT FAR BETWEEN RIBBON AND THEIR BOX 
 % ================= 1. STATEMENT BOX (Red Ribbon) =================
 \newtcolorbox{statementbox}[1]{%
     enhanced,
@@ -143,6 +144,66 @@
         at ([xshift=45pt,yshift=0pt]frame.north west) {#1};  % Centered at y=0
 
         % 5. BOTTOM RIGHT ORGANIC ACCENT
+        \path[fill=MainGreen]
+            (frame.south east) -- ++(-30pt,0)
+            .. controls ++(15pt,2pt) and ++(-5pt,18pt) ..
+            (frame.south east) -- cycle;
+    }
+}
+%THIS RIBBON FLOATING IS THE FIRST ORIGINAL IT'S EDIT AFTER NOT AFR ANYMORE BETWEEN RIBBON AND THEIR BOX
+\newtcolorbox{propositionbox}[1]{%
+    enhanced,
+    breakable,
+    colback=BoxBgGreen,
+    colframe=BorderGray,
+    boxrule=0.8pt,
+    arc=10pt,
+    top=22pt,         % Space inside for the ribbon
+    bottom=12pt,
+    left=10pt,
+    right=10pt,
+    fontupper=\khmerfont,
+    drop fuzzy shadow,
+    overlay={%
+
+        % 1. THE SHADOW (Shifted down to match)
+        \begin{scope}[shift={([xshift=1pt,yshift=-1pt]frame.north west)}]
+            \fill[black!15, blur shadow={shadow blur steps=5, shadow opacity=15}]
+                (-5pt,4pt)   % Shifted Down
+                .. controls (25pt,4pt) and (5pt,-16pt) .. (35pt,-16pt) 
+                -- (155pt,-16pt)
+                .. controls (185pt,-16pt) and (165pt,4pt) .. (195pt,4pt) 
+                -- cycle;
+        \end{scope}
+
+        % 2. THE DARK FOLD (Must move down to stay connected)
+        \fill[FoldGreen]
+            ([xshift=35pt,yshift=-16pt]frame.north west) --
+            ([xshift=40pt,yshift=-4pt]frame.north west) --
+            ([xshift=40pt,yshift=-16pt]frame.north west) -- cycle;
+
+        % 3. THE MAIN RIBBON (The whole shape moved down)
+        \path[fill=MainGreen]
+            ([xshift=-5pt,yshift=4pt]frame.north west)   % Top edge (Was 12, now 4)
+            .. controls ([xshift=25pt,yshift=4pt]frame.north west) 
+                   and ([xshift=5pt,yshift=-16pt]frame.north west) ..
+            ([xshift=35pt,yshift=-16pt]frame.north west) % Bottom edge (Was -14, now -16)
+            -- 
+            ([xshift=155pt,yshift=-16pt]frame.north west) 
+            .. controls ([xshift=185pt,yshift=-16pt]frame.north west)
+                     and ([xshift=165pt,yshift=4pt]frame.north west) ..
+            ([xshift=195pt,yshift=4pt]frame.north west) 
+            -- cycle;
+
+        % 4. THE TITLE TEXT (Centered in the new ribbon position)
+        \node[
+            anchor=west,
+            text=white,
+            font=\khmerheadingfont\large\bfseries
+        ]
+        at ([xshift=45pt,yshift=-6pt]frame.north west) {#1}; % Shifted to center
+        
+        % 5. BOTTOM RIGHT ACCENT
         \path[fill=MainGreen]
             (frame.south east) -- ++(-30pt,0)
             .. controls ++(15pt,2pt) and ++(-5pt,18pt) ..
