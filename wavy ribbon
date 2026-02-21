@@ -210,3 +210,45 @@
             (frame.south east) -- cycle;
     }
 }
+%------------old but edit to be rounded the whole tcb-----------
+%============ROUNDED (FLOATING RIBBON + THE WHOLE TCB) 
+
+                %sharp corners to arc=6pt what is arc mean , rounded ?
+                %[Y/N]===>  Y
+%=============NEWEST ADDING (BUT IT'S OLD CUSTOM BOX ONE)
+% --- 6. Custom TColorBox Definition ---
+\definecolor{NewBack}{HTML}{034C36}    % Dark teal
+\definecolor{NewFrame}{HTML}{FF812B}   % Orange
+\definecolor{BoxShadow}{HTML}{000000}  % Shadow
+
+
+\newtcolorbox{examplebox}[1]{%
+    enhanced, 
+    breakable,
+    % Colors and Border
+    colback=NewBack!5!white,
+    colframe=NewFrame,
+    boxrule=1pt, 
+    arc=6pt, % Added rounding to the main box
+    % Spacing
+    left=8pt, right=8pt, top=10pt, bottom=8pt,
+    % Floating Ribbon Title Settings
+    attach boxed title to top left={xshift=5mm, yshift=-3mm},
+    title={\khmerheadingfont #1},
+    fonttitle=\bfseries\khmerheadingfont,
+    boxed title style={
+        colframe=NewFrame,
+        arc=2pt, % Slightly rounded ribbon corners
+        interior style={
+            left color=NewBack!90!white,
+            right color=NewBack!60!white,
+            middle color=NewBack,
+            shading angle=25
+        }
+    },
+    % Shadow and Finishing
+    drop fuzzy shadow=BoxShadow,
+    % Ensures the body uses Khmer font
+    fontupper={\khmerfont\selectfont}
+}
+%-----to use : \begin{examplebox}{title }  ---->\end{examplebox}
