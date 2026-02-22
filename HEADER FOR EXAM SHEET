@@ -1,0 +1,54 @@
+%!TEX program = XeLaTeX
+\documentclass[12pt,a4paper]{article}
+\usepackage{amsfonts}
+% OR
+\usepackage{amssymb} % amssymb includes amsfonts and adds more symbols
+% ------------------- PACKAGES -------------------
+
+\usepackage{tasks}
+
+\usepackage{geometry}
+
+\geometry{margin=1in}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+\setmainlanguage{khmer}
+\setotherlanguage{english}
+
+
+% --- Footer Contact ---
+\usepackage{eso-pic}
+\usepackage{graphicx} % already included above, but safe to repeat
+
+\AddToShipoutPictureBG{%
+    % Image at the bottom-left corner
+    % Coordinates are measured from the bottom-left corner of the page
+    \put(70,30){\includegraphics[height=0.5cm]{cn.png}}
+    
+    % Image at the bottom-right corner
+    \put(460,30){\includegraphics[height=0.65cm]{so_logo.png}}
+}
+
+% --- 1. Math & English Alignment (Scaled Up) ---
+\usepackage{unicode-math}
+
+% Boost the scale here (1.08 to 1.1 is usually the "sweet spot")
+\setmainfont{STIX Two Text}[Scale=1.1] 
+\setmathfont{STIX Two Math}[Scale=1.1]
+
+% --- 2. Khmer Integration ---
+% We keep these at their standard relative scales
+\newfontfamily\khmerfont[Script=Khmer, Scale=1.1]{Khmer OS}
+\newfontfamily\khmerheadingfont[Script=Khmer, Scale=1.2]{Khmer OS Muol Light}
+
+% --- 3. Custom Commands ---
+\newcommand{\kh}[1]{{\khmerfont #1}}
+\newcommand{\khh}[1]{{\khmerheadingfont #1}}
+% --- 4. Language Management ---
+\usepackage{polyglossia}
+\setmainlanguage{khmer}
+\setotherlanguage{english}
