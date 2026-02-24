@@ -3,6 +3,10 @@
 \newtcolorbox{statementbox}[1]{%
     enhanced,
     breakable,
+% --- AUTOMATIC SPACING ---
+    before skip=12pt,         % Space above the box
+    after skip=12pt,          % Space below the box
+    % -------------------------
     colback=BoxBg,
     colframe=BorderGray,
     boxrule=0.8pt,
@@ -94,6 +98,10 @@
 \newtcolorbox{propositionbox}[1]{%
     enhanced,
     breakable,
+% --- AUTOMATIC SPACING ---
+    before skip=12pt,         % Space above the box
+    after skip=12pt,          % Space below the box
+    % -------------------------
     colback=BoxBgGreen,
     colframe=BorderGray,
     boxrule=0.8pt,
@@ -154,6 +162,10 @@
 \newtcolorbox{propositionbox}[1]{%
     enhanced,
     breakable,
+% --- AUTOMATIC SPACING ---
+    before skip=12pt,         % Space above the box
+    after skip=12pt,          % Space below the box
+    % -------------------------
     colback=BoxBgGreen,
     colframe=BorderGray,
     boxrule=0.8pt,
@@ -287,3 +299,10 @@
         \path[fill=BlueRibbonMain] (frame.south east) -- ++(-30pt,0) .. controls ++(15pt,2pt) and ++(-5pt,18pt) .. (frame.south east) -- cycle;
     }
 }
+
+
+%Importance not For TCB propo is done after i put % --- AUTOMATIC SPACING ---
+    before skip=12pt,         % Space above the box
+    after skip=12pt,          % Space below the box
+    % -------------------------
+BUT it is better to apply to examplebox outside of Propo. too cuz exam one not build-in W that kind of vertical space yet !
