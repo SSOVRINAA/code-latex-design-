@@ -252,3 +252,38 @@
     fontupper={\khmerfont\selectfont}
 }
 %-----to use : \begin{examplebox}{title }  ---->\end{examplebox}
+% NEW TCB PROPO BUT THIS KNOW ITS VERTICLE SPACE DIRECTLY NO NEED PUT \VSPLACE EVRY DAMN TIMES------------
+
+% 1. DEFINE THE BLUE COLOR THEME
+\definecolor{BlueRibbonMain}{HTML}{5faef8}    % Your requested blue
+\definecolor{BlueRibbonFold}{HTML}{3a8cd9}    % Darker blue for the 3D tuck effect
+\definecolor{BlueBoxBg}{HTML}{f2f8ff}         % Very faint blue tint for the interior
+\definecolor{BlueBorder}{HTML}{c4d8eb}        % Soft bluish-gray for the border
+\newtcolorbox{bluepropbox}[1]{%
+    enhanced,
+    breakable,
+    % --- AUTOMATIC SPACING ---
+    before skip=12pt,
+    after skip=12pt,
+    % -------------------------
+    colback=BlueBoxBg,
+    colframe=BlueBorder,
+    boxrule=0.8pt,
+    arc=12pt,
+    top=24pt,
+    bottom=12pt,
+    left=10pt,
+    right=10pt,
+    fontupper=\khmerfont,
+    drop fuzzy shadow,
+    overlay={%
+        % (Shadow, Fold, Ribbon, and Accent code remains the same as before)
+        \begin{scope}[shift={([xshift=1pt,yshift=-1pt]frame.north west)}]
+            \fill[black!12, blur shadow={shadow blur steps=5, shadow opacity=15}] (-5pt,4pt) .. controls (25pt,4pt) and (5pt,-16pt) .. (35pt,-16pt) -- (155pt,-16pt) .. controls (185pt,-16pt) and (165pt,4pt) .. (195pt,4pt) -- cycle;
+        \end{scope}
+        \fill[BlueRibbonFold] ([xshift=35pt,yshift=-16pt]frame.north west) -- ([xshift=40pt,yshift=-4pt]frame.north west) -- ([xshift=40pt,yshift=-16pt]frame.north west) -- cycle;
+        \path[fill=BlueRibbonMain] ([xshift=-5pt,yshift=4pt]frame.north west) .. controls ([xshift=25pt,yshift=4pt]frame.north west) and ([xshift=5pt,yshift=-16pt]frame.north west) .. ([xshift=35pt,yshift=-16pt]frame.north west) -- ([xshift=155pt,yshift=-16pt]frame.north west) .. controls ([xshift=185pt,yshift=-16pt]frame.north west) and ([xshift=165pt,yshift=4pt]frame.north west) .. ([xshift=195pt,yshift=4pt]frame.north west) -- cycle;
+        \node[anchor=west, text=white, font=\khmerheadingfont\large\bfseries] at ([xshift=45pt,yshift=-6pt]frame.north west) {#1};
+        \path[fill=BlueRibbonMain] (frame.south east) -- ++(-30pt,0) .. controls ++(15pt,2pt) and ++(-5pt,18pt) .. (frame.south east) -- cycle;
+    }
+}
