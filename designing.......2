@@ -1,0 +1,278 @@
+% ============================================================
+%  minimalist-tcb.tex
+%
+%  Exact visual analysis of the image:
+%
+%  DEFINITION box (定义):
+%    • Rounded box, pale lavender bg (#EDE8F0), thin subtle border
+%    • Drop shadow (very soft)
+%    • TOP-LEFT: small crimson rounded pill label, sits ON the top
+%      border (half-inside, half-outside) — contains bold "定义 X.X.X."
+%      + italic name in white
+%    • BOTTOM-RIGHT: a folded-corner accent — two overlapping curved
+%      crimson shapes creating a page-curl / dog-ear look
+%
+%  EXAMPLE box (例题):
+%    • Rounded box, pale cream bg, thin gray border
+%    • TOP-LEFT: small olive rounded pill (same structure)
+%    • No bottom-right accent
+%
+%  KEY INSIGHT: the pill uses `attach boxed title to top left`
+%  NOT a full ribbon. The bottom-right is a curved fill, not wavy.
+%
+%  Compile: XeLaTeX or pdfLaTeX
+% ============================================================
+
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[a4paper, left=2.8cm, right=2.8cm, top=3cm, bottom=3cm]{geometry}
+\setlength{\parskip}{0.55em}
+\setlength{\parindent}{0pt}
+\usepackage{amsmath, amssymb}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+
+% ── Page colour ──────────────────────────────────────────────
+\definecolor{nuanbai}{HTML}{f5f5f5}
+\pagecolor{nuanbai}
+
+% ============================================================
+%  PALETTE  (eye-dropped from image)
+% ============================================================
+\definecolor{tealthead}{HTML}{2c4f54}   % section/sub badges
+
+% — Definition —
+\definecolor{DefiPill}{HTML}{C03060}    % crimson pill
+\definecolor{DefiBack}{HTML}{ECE7F0}    % pale lavender body
+\definecolor{DefiFrame}{HTML}{C8B8CC}   % faint purple-gray border
+
+% — Example —
+\definecolor{ExamPill}{HTML}{70703A}    % olive pill
+\definecolor{ExamBack}{HTML}{F0F0E8}    % pale cream body
+\definecolor{ExamFrame}{HTML}{B0B08A}   % olive-gray border
+
+% ============================================================
+%  BOTTOM-RIGHT FOLDED CORNER
+%  Two overlapping curved fills that create a page-curl / 
+%  dog-ear effect — matches the crimson accent in the image.
+%
+%  Usage inside overlay={...}:  \foldedcorner{DefiPill}{frame}
+% ============================================================
+\newcommand{\foldedcorner}[2]{%
+  % Outer (larger, darker) curved shape
+  \fill[#1!90, opacity=0.80]
+    ([xshift= -36pt]#2.south east)
+    .. controls
+       ([xshift=-10pt, yshift=  6pt]#2.south east) and
+       ([xshift=  0pt, yshift= 22pt]#2.south east) ..
+    (#2.south east) -- cycle;
+  % Inner (smaller, lighter) curved shape — creates depth
+  \fill[#1!65, opacity=0.70]
+    ([xshift= -20pt]#2.south east)
+    .. controls
+       ([xshift= -5pt, yshift=  4pt]#2.south east) and
+       ([xshift=  0pt, yshift= 13pt]#2.south east) ..
+    (#2.south east) -- cycle;
+}
+
+% ============================================================
+%  1. DEFINITION BOX  (定义)
+%     Pill uses `attach boxed title to top left` so it straddles
+%     the top border naturally. Bottom-right gets the fold accent.
+% ============================================================
+\newtcolorbox[
+  auto counter,
+  number within = section,
+]{definition}[2][]{%
+  enhanced,
+  breakable,
+  arc      = 6pt,
+  boxrule  = 0.6pt,
+  colframe = DefiFrame,
+  colback  = DefiBack,
+  left     = 10pt,
+  right    = 10pt,
+  top      = 8pt,
+  bottom   = 10pt,
+  % soft drop shadow
+  drop fuzzy shadow = {0.5pt}{-1.5pt}{0pt}{0.3pt}{black!20},
+  % ── Pill title straddles top border ─────────────────────
+  title = {%
+    \textbf{定义~\thetcbcounter.}%
+    \ifstrempty{#2}{}{\enspace\textit{#2}}%
+  },
+  attach boxed title to top left = {
+    xshift = 10pt,
+    yshift = -\tcboxedtitleheight/2,
+  },
+  boxed title style = {
+    enhanced,
+    colback  = DefiPill,
+    colframe = DefiPill,
+    arc      = 4pt,
+    boxrule  = 0pt,
+    left     = 6pt,
+    right    = 6pt,
+    top      = 2.5pt,
+    bottom   = 2.5pt,
+    sharp corners = south,  % flat bottom, rounded top
+    fontupper = \bfseries\small\color{white}\sffamily,
+  },
+  % ── Folded corner overlay ───────────────────────────────
+  overlay unbroken = {\foldedcorner{DefiPill}{frame}},
+  overlay last     = {\foldedcorner{DefiPill}{frame}},
+  #1
+}
+
+% ============================================================
+%  2. EXAMPLE BOX  (例题)
+%     Same structure, olive color, no bottom accent.
+% ============================================================
+\newtcolorbox[
+  auto counter,
+  number within = section,
+]{examplebox}[2][]{%
+  enhanced,
+  breakable,
+  arc      = 6pt,
+  boxrule  = 0.6pt,
+  colframe = ExamFrame,
+  colback  = ExamBack,
+  left     = 10pt,
+  right    = 10pt,
+  top      = 8pt,
+  bottom   = 10pt,
+  drop fuzzy shadow = {0.5pt}{-1.5pt}{0pt}{0.3pt}{black!15},
+  title = {%
+    \textbf{例题~\thetcbcounter.}%
+    \ifstrempty{#2}{}{\enspace\textit{#2}}%
+  },
+  attach boxed title to top left = {
+    xshift = 10pt,
+    yshift = -\tcboxedtitleheight/2,
+  },
+  boxed title style = {
+    enhanced,
+    colback  = ExamPill,
+    colframe = ExamPill,
+    arc      = 4pt,
+    boxrule  = 0pt,
+    left     = 6pt,
+    right    = 6pt,
+    top      = 2.5pt,
+    bottom   = 2.5pt,
+    sharp corners = south,
+    fontupper = \bfseries\small\color{white}\sffamily,
+  },
+  #1
+}
+
+% ============================================================
+%  3. SECTION BADGE  \secbadge{1.1}{Title}
+%  Teal filled rounded rect "Sec 1.1" + title beside
+% ============================================================
+\newcommand{\secbadge}[2]{%
+  \vspace{1.6ex}\noindent
+  \begin{tikzpicture}[baseline=(b.base)]
+    \node[
+      fill = tealthead, text = white,
+      font = \bfseries\sffamily\small,
+      inner xsep = 8pt, inner ysep = 4pt,
+      rounded corners = 3pt,
+    ] (b) {Sec\;#1};
+  \end{tikzpicture}%
+  \hspace{0.7em}{\large\bfseries #2}\par\vspace{0.3ex}%
+}
+
+% ============================================================
+%  4. SUBSECTION BADGE  \subsecbadge{1.1.1}{Title}
+%  Teal filled square with white number + title
+% ============================================================
+\newcommand{\subsecbadge}[2]{%
+  \vspace{1.2ex}\noindent
+  \begin{tikzpicture}[baseline=(b.base)]
+    \node[
+      fill = tealthead, text = white,
+      font = \bfseries\sffamily,
+      inner xsep = 6pt, inner ysep = 4pt,
+      rounded corners = 2pt,
+    ] (b) {#1};
+  \end{tikzpicture}%
+  \hspace{0.65em}{\large\bfseries #2}\par\vspace{0.3ex}%
+}
+
+% ============================================================
+%  DEMO
+% ============================================================
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries\scshape Blow-up}\\[4pt]
+  {\small Pill label + folded corner — matches reference image}
+\end{center}
+
+\bigskip
+
+\secbadge{1.1}{Basic Concepts and Examples}
+
+\subsecbadge{1.1.1}{Example I}
+
+\subsubsection*{Some notations}
+
+\begin{definition}{transgressive}
+  An element $\alpha \in H^{p,q}_{\bar\partial}(F)$ is called
+  \textit{transgressive} if there is a representative
+  $\alpha \in \mathcal{A}^{p,q}_{\bar\partial}(F)$ which extends to a
+  form $\widetilde\alpha \in \mathcal{A}^{p,q}_{\bar\partial}(F)$ such that
+  $\widetilde\alpha = \pi^*\beta$ for some $\bar\partial$-closed form
+  $\beta \in \mathcal{A}^{p,q+1}_{\bar\partial}(B)$.
+\end{definition}
+
+\medskip
+
+The following are all the settings in this paper.
+
+\begin{enumerate}
+  \item $i^*\colon \mathcal{A}^{p,q}(M)\to\mathcal{A}^{p,q}(N)$ is
+        surjective, inducing a short exact sequence
+        \[
+          0\to\mathcal{A}^{p,\bullet}(M,N)\to\mathcal{A}^{p,\bullet}(M)
+          \xrightarrow{\,i^*\,}\mathcal{A}^{p,\bullet}(N)\to 0
+        \]
+        and a long exact sequence
+        \[
+          \cdots\to H^{p,\bullet}_{\bar\partial}(M,N)\to
+          H^{p,\bullet}_{\bar\partial}(M)\to
+          H^{p,\bullet}_{\bar\partial}(N)\to\cdots
+        \]
+  \item \ldots
+\end{enumerate}
+
+\subsecbadge{1.1.2}{Blow-up with the center at a point}
+
+\medskip
+
+\begin{definition}{Blow-up}
+  Let $X$ be a complex manifold and $Y\subset X$ a closed submanifold.
+  The \textit{Blow-up of $X$ along $Y$} is a complex manifold
+  $\widehat{X}:=\mathrm{Bl}_Y(X)$ together with a proper holomorphic
+  map $\sigma\colon\widehat{X}\to X$.
+\end{definition}
+
+\medskip
+
+\begin{examplebox}{Blow-up with the center at a point}
+  Consider the line bundle $\mathcal{O}(-1)$ over the projective
+  manifold $\mathbb{P}^n$, the tautological bundle whose fiber over
+  $[v]\in\mathbb{P}^n$ is the line
+  $\mathbb{C}\,v\subset\mathbb{C}^{n+1}$.
+\end{examplebox}
+
+\end{document}
