@@ -1,0 +1,298 @@
+% ============================================================
+%  minimalist-tcb.tex
+%  Faithful recreation of the TCB boxes from the reference image
+%  (beautybook template style)
+%
+%  Boxes in this file:
+%    1. definition  — crimson pill title + folded ribbon corner
+%    2. examplebox  — olive pill title + thin border, no ornament
+%    3. \secbadge   — teal filled badge for section headings
+%    4. \subsecbadge— teal filled square for subsection headings
+%
+%  Compile: XeLaTeX (recommended) or pdfLaTeX
+% ============================================================
+
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[a4paper, left=2.8cm, right=2.8cm, top=3cm, bottom=3cm]{geometry}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+\usepackage{amsmath, amssymb}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+
+% ── Page colour (warm white like beautybook) ─────────────────
+\definecolor{nuanbai}{HTML}{f5f5f5}
+\pagecolor{nuanbai}
+
+% ============================================================
+%  PALETTE
+% ============================================================
+\definecolor{fg}{HTML}{2c4f54}          % dark teal — badges
+\definecolor{defirose}{HTML}{C0395A}    % crimson — definition
+\definecolor{defiback}{HTML}{EDE8EF}    % pale lavender — definition body
+\definecolor{examolive}{HTML}{787848}   % olive — example header
+\definecolor{examback}{HTML}{EFEFEA}    % cream — example body
+\definecolor{examframe}{HTML}{AAAAAA}   % thin gray border for example
+
+% ============================================================
+%  FOLDED RIBBON CORNER macro
+%  Replicates the bottom-right folded corner in the image.
+%  Usage inside overlay={}:
+%    \ribboncorner{frame}{defirose}
+%
+%  The shape: a dark-rose filled quadrilateral that looks like
+%  a page corner fold — flat at the bottom, angled diagonal cut.
+% ============================================================
+\newcommand{\ribboncorner}[2]{%
+  % Outer dark fold — larger triangle/quadrilateral
+  \fill[#2!85, opacity=0.85]
+    ([xshift=-28mm]#1.south east) --
+    (#1.south east) --
+    ([yshift= 18mm]#1.south east) --
+    ([xshift=-10mm, yshift=10mm]#1.south east) -- cycle;
+  % Inner lighter layer — narrower, creates depth
+  \fill[#2!60, opacity=0.70]
+    ([xshift=-16mm]#1.south east) --
+    (#1.south east) --
+    ([yshift= 10mm]#1.south east) --
+    ([xshift=-6mm, yshift=6mm]#1.south east) -- cycle;
+  % Tiny highlight triangle at the fold tip
+  \fill[white, opacity=0.25]
+    ([xshift=-10mm, yshift=10mm]#1.south east) --
+    ([xshift=-16mm]#1.south east) --
+    ([xshift=-6mm,  yshift= 6mm]#1.south east) -- cycle;
+}
+
+% ============================================================
+%  1. DEFINITION BOX  (定义)
+%
+%  From the image:
+%  • Pale lavender background (#EDE8EF), NO left border rule
+%  • Thin outer frame (subtle)
+%  • Title = small crimson rounded-rect pill, positioned inside
+%    the box at the top-left (not floating above the border)
+%  • Title text: bold "定义 X.X.X." + italic name, white on crimson
+%  • Bottom-right: crimson folded ribbon corner (two-tone fold)
+% ============================================================
+\newtcolorbox[
+  auto counter,
+  number within = section,
+]{definition}[2][]{%
+  enhanced,
+  breakable,
+  arc       = 3pt,
+  boxrule   = 0.4pt,
+  colframe  = defirose!25,
+  colback   = defiback,
+  left      = 1em,
+  right     = 1em,
+  top       = 2.2em,       % make room for pill inside the box
+  bottom    = 1em,
+  % ── Ribbon corner overlay ─────────────────────────────
+  overlay unbroken = {%
+    \ribboncorner{frame}{defirose}
+    % ── Pill title drawn inside box ──────────────────
+    \node[
+      fill        = defirose,
+      text        = white,
+      font        = \bfseries\sffamily\small,
+      inner xsep  = 7pt,
+      inner ysep  = 3pt,
+      rounded corners = 3pt,
+      anchor      = west,
+    ] at ([xshift=1em, yshift=-1.35em]frame.north west)
+      {定义~\thetcbcounter.\enspace\textit{#2}};
+  },
+  overlay first = {%
+    % ── Pill title for breakable first part ──────────
+    \node[
+      fill        = defirose,
+      text        = white,
+      font        = \bfseries\sffamily\small,
+      inner xsep  = 7pt,
+      inner ysep  = 3pt,
+      rounded corners = 3pt,
+      anchor      = west,
+    ] at ([xshift=1em, yshift=-1.35em]frame.north west)
+      {定义~\thetcbcounter.\enspace\textit{#2}};
+  },
+  overlay last = {%
+    \ribboncorner{frame}{defirose}
+  },
+  #1
+}
+
+% ============================================================
+%  2. EXAMPLE BOX  (例题)
+%
+%  From the image:
+%  • Pale cream/white background, thin gray border, arc corners
+%  • Title = small olive rounded-rect pill inside box at top-left
+%  • Title text: bold "例题 X.X.X." + italic name, white on olive
+%  • No corner ornament
+% ============================================================
+\newtcolorbox[
+  auto counter,
+  number within = section,
+]{examplebox}[2][]{%
+  enhanced,
+  breakable,
+  arc       = 3pt,
+  boxrule   = 0.5pt,
+  colframe  = examframe,
+  colback   = examback,
+  left      = 1em,
+  right     = 1em,
+  top       = 2.2em,
+  bottom    = 1em,
+  overlay unbroken = {%
+    \node[
+      fill        = examolive,
+      text        = white,
+      font        = \bfseries\sffamily\small,
+      inner xsep  = 7pt,
+      inner ysep  = 3pt,
+      rounded corners = 3pt,
+      anchor      = west,
+    ] at ([xshift=1em, yshift=-1.35em]frame.north west)
+      {例题~\thetcbcounter.\enspace\textit{#2}};
+  },
+  overlay first = {%
+    \node[
+      fill        = examolive,
+      text        = white,
+      font        = \bfseries\sffamily\small,
+      inner xsep  = 7pt,
+      inner ysep  = 3pt,
+      rounded corners = 3pt,
+      anchor      = west,
+    ] at ([xshift=1em, yshift=-1.35em]frame.north west)
+      {例题~\thetcbcounter.\enspace\textit{#2}};
+  },
+  #1
+}
+
+% ============================================================
+%  3. SECTION BADGE  \secbadge{1.1}{Title}
+%  Teal filled rounded-rect "Sec 1.1" + bold title beside it
+% ============================================================
+\newcommand{\secbadge}[2]{%
+  \vspace{1.8ex}%
+  \noindent
+  \begin{tikzpicture}[baseline=(b.base)]
+    \node[
+      fill           = fg,
+      text           = white,
+      font           = \bfseries\sffamily\small,
+      inner xsep     = 8pt,
+      inner ysep     = 4pt,
+      rounded corners = 3pt,
+      anchor         = west,
+    ] (b) at (0,0) {Sec\;#1};
+  \end{tikzpicture}%
+  \hspace{0.7em}{\large\bfseries #2}\par
+  \vspace{0.4ex}%
+}
+
+% ============================================================
+%  4. SUBSECTION BADGE  \subsecbadge{1.1.1}{Title}
+%  Teal filled square with white bold number + title
+% ============================================================
+\newcommand{\subsecbadge}[2]{%
+  \vspace{1.4ex}%
+  \noindent
+  \begin{tikzpicture}[baseline=(b.base)]
+    \node[
+      fill           = fg,
+      text           = white,
+      font           = \bfseries\sffamily,
+      inner xsep     = 6pt,
+      inner ysep     = 4.5pt,
+      rounded corners = 2pt,
+    ] (b) at (0,0) {#1};
+  \end{tikzpicture}%
+  \hspace{0.65em}{\large\bfseries #2}\par
+  \vspace{0.4ex}%
+}
+
+% ============================================================
+%  DEMO
+% ============================================================
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries\scshape Blow-up}\\[4pt]
+  {\small Faithful TCB recreation — beautybook style}
+\end{center}
+
+\bigskip
+
+% Section
+\secbadge{1.1}{Basic Concepts and Examples}
+
+% Subsection
+\subsecbadge{1.1.1}{Example I}
+
+\subsubsection*{Some notations}
+
+% Definition
+\begin{definition}{transgressive}
+  An element $\alpha \in H^{p,q}_{\bar\partial}(F)$ is called
+  \textit{transgressive} if there is a representative
+  $\alpha \in \mathcal{A}^{p,q}_{\bar\partial}(F)$ which extends to a form
+  $\widetilde\alpha \in \mathcal{A}^{p,q}_{\bar\partial}(F)$ such that
+  $\widetilde\alpha = \pi^*\beta$ for some $\bar\partial$-closed form
+  $\beta \in \mathcal{A}^{p,q+1}_{\bar\partial}(B)$.
+\end{definition}
+
+\medskip
+
+The following are all the settings in this paper.
+
+\begin{enumerate}
+  \item $i^*\colon \mathcal{A}^{p,q}(M)\to\mathcal{A}^{p,q}(N)$ is surjective,
+        which induces a short exact sequence for the pair $(M,N)$ of complexes
+        \[
+          0\to\mathcal{A}^{p,\bullet}(M,N)\to\mathcal{A}^{p,\bullet}(M)
+          \xrightarrow{\,i^*\,}\mathcal{A}^{p,\bullet}(N)\to 0
+        \]
+        and a long exact sequence
+        \[
+          \cdots\to H^{p,\bullet}_{\bar\partial}(M,N)\to
+          H^{p,\bullet}_{\bar\partial}(M)\to
+          H^{p,\bullet}_{\bar\partial}(N)\to\cdots
+        \]
+
+  \item \ldots
+\end{enumerate}
+
+\subsecbadge{1.1.2}{Blow-up with the center at a point}
+
+\medskip
+
+\begin{definition}{Blow-up}
+  Let $X$ be a complex manifold and let $Y\subset X$ be a closed submanifold.
+  The \textit{Blow-up of $X$ along $Y$} is a complex manifold
+  $\widehat{X}:=\mathrm{Bl}_Y(X)$ together with a proper holomorphic map
+  $\sigma\colon\widehat{X}\to X$.
+\end{definition}
+
+\medskip
+
+\begin{examplebox}{Blow-up with the center at a point}
+  Consider the situation of the line bundle $\mathcal{O}(-1)$ over the
+  projective manifold $\mathbb{P}^n$, which is given as the tautological
+  bundle whose fiber over $[v]\in\mathbb{P}^n$ is the line
+  $\mathbb{C}\,v\subset\mathbb{C}^{n+1}$.
+\end{examplebox}
+
+\end{document}
